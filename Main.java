@@ -36,6 +36,14 @@ public class Main{
             else if (tileValue == 0) {
                 BoardHandler.revealSafeTiles(board, boardMask, coords);
             }
+
+            // System.out.println("Total Revealed: " + BoardHandler.totalRevealedTiles);
+
+            // win con
+            if (totalMines == boardSize * boardSize - BoardHandler.totalRevealedTiles) {
+                GameMaster.gameWin(board, boardMask);
+                break;
+            }
         }
     }
 }

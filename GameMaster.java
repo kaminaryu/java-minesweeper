@@ -38,9 +38,10 @@ public class GameMaster {
         Scanner input = new Scanner(System.in);
         char[] coords = new char[2];
         int[] actualCoords = new int[2];
+        // String inputText = "";
 
         do {
-            System.out.print("\nChoose a tile to unvail [row (space) column]: ");
+            System.out.print("\nChoose a tile to unvail [row (space) column | type flag to change mode]: ");
             coords[0] = input.next().charAt(0);
             coords[1] = input.next().charAt(0);
 
@@ -68,6 +69,19 @@ public class GameMaster {
             for (int j = 0; j < board[i].length; j++) {
                 if (board[i][j] == 9) 
                     mask[i][j] = 1;
+            }
+        }
+
+        BoardHandler.displayBoard(board, mask);
+    }
+
+    public static void gameWin(int[][] board, int[][] mask) {
+        System.out.println("\nYou won!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                if (board[i][j] == 9)
+                    mask[i][j] = 2;
             }
         }
 

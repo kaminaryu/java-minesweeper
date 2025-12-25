@@ -2,6 +2,8 @@ package minesweeper;
 import java.util.Scanner;
 
 public class BoardHandler {
+    public static int totalRevealedTiles = 0;
+
     public static int getBoardSize() {
         int size = 0;
         Scanner input = new Scanner(System.in);
@@ -64,7 +66,7 @@ public class BoardHandler {
                 // if out of bounds
                 if (col + c < 0 || col + c > board[row + r].length - 1) continue;
 
-                if (row + r == 0 && col + c == 0) continue;
+                if (r == 0 && c == 0) continue;
 
                 if (board[row + r][col + c] == 9) continue;
 
@@ -121,6 +123,7 @@ public class BoardHandler {
 
     public static int unvailTile(int[][] mask, int[][] board, int[] coords) {
         mask[coords[0]][coords[1]] = 1;
+        totalRevealedTiles++;
         return board[coords[0]][coords[1]];
     }
 
@@ -142,9 +145,9 @@ public class BoardHandler {
                 mask[row + r][col + c] = 1;
 
                 if (board[row + r][col + c] == 0) {
-                    // board[row + r][col + c] = -1;
                     revealSafeTiles(board, mask, new int[]{row + r, col + c});
                 }
+                totalRevealedTiles++;
             }
         }
     }
