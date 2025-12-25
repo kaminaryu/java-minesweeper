@@ -3,6 +3,9 @@ import java.util.Scanner;
 
 public class BoardHandler {
     public static int totalRevealedTiles = 0;
+    public static int totalMineFlagged = 0;
+    public static int totalFalseFlagged = 0;
+    public static int gameMode = 1; // 1 : digging  2 : flagging ( bad practice ik, its 5am so idc)
 
     public static int getBoardSize() {
         int size = 0;
@@ -11,7 +14,7 @@ public class BoardHandler {
         do {
             System.out.println("Pick the board size.");
             System.out.print("Enter an int between 4 and 36: ");
-            size = input.nextInt();
+            size = Integer.parseInt(input.nextLine());
 
             if (size < 4 || size > 36)
                 System.out.println("Range Error. Try Again.");
@@ -33,7 +36,7 @@ public class BoardHandler {
                 3) Hard
                 Choose a difficulty [1 or 2 or 3]:\s"""
             );
-            difficulty = input.nextInt();
+            difficulty = Integer.parseInt(input.nextLine());
 
             if (difficulty < 1 || difficulty > 3)
                 System.out.println("\nInvalid choice!\n");
@@ -121,11 +124,51 @@ public class BoardHandler {
         System.out.println();
     }
 
-    public static int unvailTile(int[][] mask, int[][] board, int[] coords) {
-        mask[coords[0]][coords[1]] = 1;
-        totalRevealedTiles++;
-        return board[coords[0]][coords[1]];
+
+    public static boolean unvailTile(int[][] board, int[][] mask, int[] coords) {
+        int row = coords[0];
+        int col = coords[1];
+        int tileValue = board[row][col];
+
+
+        if (gameMode == 1) {
+            if (mask[row][col] == 2) {
+                System.out.println("\n!!! Can not dig flagged tiles. !!!");
+                return false;
+            }
+            mask[row][col] = 1;
+            totalRevealedTiles++;
+
+            if (tileValue == 9) {
+                GameMaster.gameOver(board, mask);
+                return true;
+            }
+            else if (tileValue == 0) {
+                BoardHandler.revealSafeTiles(board, mask, coords);
+            }
+        }
+        else if (gameMode == 2) {
+            switch (mask[row][col]) {
+                case 0:
+                    mask[row][col] = 2;
+                    if (board[row][col] == 9)
+                        totalMineFlagged++;
+                    else
+                        totalFalseFlagged++;
+                    break;
+                case 2:
+                    mask[row][col] = 0;
+                    if (board[row][col] == 9)
+                        totalMineFlagged--;
+                    else
+                        totalFalseFlagged--;
+                    break;
+            }
+        }
+
+        return false;
     }
+
 
     public static void revealSafeTiles(int[][] board, int[][] mask, int[] coords) {
         int row = coords[0];

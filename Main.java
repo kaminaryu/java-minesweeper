@@ -27,20 +27,21 @@ public class Main{
                 continue;
             }
 
-            tileValue = BoardHandler.unvailTile(boardMask, board, coords);
+            boolean gameover = BoardHandler.unvailTile(board, boardMask, coords);
 
-            if (tileValue == 9) {
-                GameMaster.gameOver(board, boardMask);
+            if (gameover)
                 break;
-            }
-            else if (tileValue == 0) {
-                BoardHandler.revealSafeTiles(board, boardMask, coords);
-            }
 
             // System.out.println("Total Revealed: " + BoardHandler.totalRevealedTiles);
+            // System.out.println("Total Flagged: " + BoardHandler.totalFlagged);
+            System.out.println();
 
             // win con
             if (totalMines == boardSize * boardSize - BoardHandler.totalRevealedTiles) {
+                GameMaster.gameWin(board, boardMask);
+                break;
+            }
+            else if (BoardHandler.totalMineFlagged == totalMines && BoardHandler.totalFalseFlagged == 0) {
                 GameMaster.gameWin(board, boardMask);
                 break;
             }
