@@ -9,8 +9,9 @@ public class Main{
         int[][] boardMask = new int[boardSize][boardSize];
 
         Scanner input = new Scanner(System.in);
-
         int totalMines = BoardHandler.getTotalMines(boardSize);
+        int tileValue = 0;
+
         BoardHandler.placeMines(board, totalMines);
  
         while (true) {
@@ -26,7 +27,15 @@ public class Main{
                 continue;
             }
 
-            GameMaster.unvailTile(boardMask, board, coords);
+            tileValue = BoardHandler.unvailTile(boardMask, board, coords);
+
+            if (tileValue == 9) {
+                GameMaster.gameOver(board, boardMask);
+                break;
+            }
+            else if (tileValue == 0) {
+                BoardHandler.revealSafeTiles(board, boardMask, coords);
+            }
         }
     }
 }

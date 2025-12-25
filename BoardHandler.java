@@ -107,14 +107,45 @@ public class BoardHandler {
             else 
                 System.out.print("\n" + (char)(55 + i) + "   ");
 
-
             for (int j = 0; j < board[i].length; j++) {
                 if (mask[i][j] == 0)
                     System.out.print("# ");
-                else 
-                    System.out.print(board[i][j] == 9 ? "☢ " : board[i][j]  + " ");
+                else if (mask[i][j] == 2)
+                    System.out.print("⚐ ");
+                else // 
+                    System.out.print( (board[i][j] == 9 ? "☢" : board[i][j]) + " " );
             }
         }
         System.out.println();
+    }
+
+    public static int unvailTile(int[][] mask, int[][] board, int[] coords) {
+        mask[coords[0]][coords[1]] = 1;
+        return board[coords[0]][coords[1]];
+    }
+
+    public static void revealSafeTiles(int[][] board, int[][] mask, int[] coords) {
+        int row = coords[0];
+        int col = coords[1];
+
+        for (int r = -1; r < 2; r++) {
+            // if out of bounds
+            if (row + r < 0 || row + r > mask.length - 1) continue;
+
+            for (int c = -1; c < 2; c++) {
+                // if out of bounds
+                if (col + c < 0 || col + c > mask[row + r].length - 1) continue;
+
+                // dont recheck the revealed tiles (Stack Overflow)
+                if (mask[row + r][col + c] == 1) continue;
+
+                mask[row + r][col + c] = 1;
+
+                if (board[row + r][col + c] == 0) {
+                    // board[row + r][col + c] = -1;
+                    revealSafeTiles(board, mask, new int[]{row + r, col + c});
+                }
+            }
+        }
     }
 }

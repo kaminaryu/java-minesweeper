@@ -60,8 +60,17 @@ public class GameMaster {
         return actualCoords;
     }
 
-    public static int unvailTile(int[][] mask, int[][] board, int[] coords) {
-        mask[coords[0]][coords[1]] = 1;
-        return board[coords[0]][coords[1]];
+
+    public static void gameOver(int[][] board, int[][] mask) {
+        System.out.println("\nGAME OVER!! You dug up a mine.\n");
+        
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                if (board[i][j] == 9) 
+                    mask[i][j] = 1;
+            }
+        }
+
+        BoardHandler.displayBoard(board, mask);
     }
 }
